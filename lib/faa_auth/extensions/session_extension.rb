@@ -125,20 +125,13 @@ module FaaAuth
     end
 
     def click_access_form
-      sleep(1)
+  #    sleep(1)
       debug "Begin click_access_form\n"
-      session.click_button 'LOGIN_BUTTON'
-      debug("Current path after login button clicked #{current_path}\n")
-      wait_for_selector(initial_url_selector)
-      unless session.has_css?(initial_url_selector)
-        wait_for_selector(initial_url_selector)
+      session.document.synchronize(5) do
+        btn = session.find('#LOGIN_BUTTON')
+        btn.click if btn
+        session.find(initial_url_selector)
       end
-      if session.has_css?('#LOGIN_BUTTON')
-        session.click_button 'LOGIN_BUTTON'
-      end
-      # if session.has_css?('#LOGIN_BUTTON')
-      #   click_access_form
-      # end
       log "clicked Signin"
       debug "End click_access_form\n"
       session.save_cookies if keep_cookie?
