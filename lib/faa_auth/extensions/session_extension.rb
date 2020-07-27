@@ -52,7 +52,8 @@ module FaaAuth
         debug "found sign in link: [#{link}]\n"
         session.click_link link
       end
-      success = submit_signin_form
+      success = submit_use_email_address
+      # success = submit_signin_form
       if success
         success =submit_access_form
       end
@@ -79,6 +80,14 @@ module FaaAuth
       '#cont'
     end
 
+    def submit_use_email_address
+      session.fill_in('userEmail', with: login)
+      session.first(agree_button_selector).click
+      log "Clicked Agree&Continue"
+      debug "End submit_signin_form\n"
+      true
+    end
+
     def submit_signin_form
       debug "Begin submit_signin_form\n"
       unless session.has_selector? agree_button_selector
@@ -95,26 +104,39 @@ module FaaAuth
 
     def submit_access_form
       fillin_access_form
-      click_access_form
+    end
+
+    def login_button
+      session.find_by_id('LOGIN_BUTTON')
+    end
+
+    def login_button_enabled?
+      !login_button['class'].split.include? 'disabled'
     end
 
 
     def fillin_access_form
       debug "Begin fillin_access_form\n"
-      # raise('Failed on signin') if alert_displayed?
-      # unless session.has_selector?('#PIN_INPUT')
-      #   log 'MyAccess input not found in this page'
-      #   return false
-      # end
       wait_for_selector('#PIN_INPUT')
-      security_answer = get_security_answer
-      session.fill_in 'PIN_INPUT', with: password
+      question = get_security_question
+      security_answer = get_security_answer_for_question(question)
+      pin = get_access_pin
+      session.fill_in 'PIN_INPUT', with: pin
       session.fill_in 'answer0', with: security_answer
-      debug("Current path in fillin_access_form #{current_path}\n")
+      sleep(2)
+      #login_button = session.find_by_id('LOGIN_BUTTON')
+     # loop do
+      #  answer_field.send_keys [:control, "a"]
+       # break if login_button_enabled?
+      #end
+      session.click_on('Sign In')
+      fill_in_access_form if session.has_selector?('#PIN_INPUT')
+      log "Clicked Sign In"
       debug "End fillin_access_form/n"
+      true
     end
 
-    def get_security_answer
+    def get_security_answer_for_question(security_question)
       if match_security_question? security_question
         security_answer = get_security_answer_from_env(security_question)
         security_answer = ask security_question unless security_answer
@@ -125,7 +147,6 @@ module FaaAuth
     end
 
     def click_access_form
-  #    sleep(1)
       debug "Begin click_access_form\n"
       session.document.synchronize(5) do
         btn = session.find('#LOGIN_BUTTON')
@@ -139,7 +160,7 @@ module FaaAuth
 
     end
 
-    def security_question
+    def get_security_question
       form_labels = doc.css('#INPUT_FORM').css('label')
       form_labels .find{|l| l['for'] =~ /answer/}.text
     end
@@ -174,8 +195,8 @@ module FaaAuth
     def login
       options.fetch(:login, Converter.decode(ENV['FAA_USERNAME_CODE']))
     end
-    def password
-      options.fetch(:password, Converter.decode(ENV['FAA_PASSWORD_CODE']))
+    def get_access_pin
+      options.fetch(:password, Converter.decode(ENV['FAA_ACCESS_PIN']))
     end
 
     def get_security_answer_from_env(question)
@@ -205,29 +226,3 @@ module FaaAuth
   end
 
 end
-
-
-
-
-
-#   def security_question
-#   end
-
-#   def security_answer
-#     doc.css('#securit
-#     #options.fetch(:security_answer, Converter.decode(ENV['FAA_SECURITY_ANSWER1']))
-#     'Mia'
-#   end
-
-#   def security_answer2
-
-#   end
-
-#   def security_question2
-#   end
-
-#   def security_answers
-#     security_question1: Converter.decode(ENV['FAA_SECURITY_QUESTION1']))
-#     security_answer1: Converter.decode(ENV['FAA_SECURITY_ANSWER1']))
-
-# end

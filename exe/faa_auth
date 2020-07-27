@@ -7,7 +7,7 @@ result = []
 
 domain = ask("Enter your faa domain: ") { |q| q.echo = true ; q.default = FaaInfo.domain }
 login = ask("Enter your #{domain} username: ") { |q| q.echo = true }
-passwd = ask("Enter your #{domain} password: ") { |q| q.echo = "*" }
+passwd = ask("Enter your FAA Access pin : ") { |q| q.echo = "*" }
 sec1 = ask("Enter security question1: "){ |q| q.echo = true ;}
 ans1 = ask("Enter security answer1: "){ |q| q.echo = true ;}
 sec2 = ask("Enter security question2: "){ |q| q.echo = true ;}
@@ -26,7 +26,7 @@ puts "Put the following lines in .env"
 puts
 puts "FAA_DOMAIN=#{domain}"
 puts "FAA_USERNAME_CODE=#{converter.encode(login)}"
-puts "FAA_PASSWORD_CODE=#{converter.encode(passwd)}"
+puts "FAA_ACCESS_PIN=#{converter.encode(passwd)}"
 puts "FAA_SECURITY_QUESTION1=#{converter.encode(sec1)}"
 puts "FAA_SECURITY_ANSWER1=#{converter.encode(ans1)}"
 puts "FAA_SECURITY_QUESTION2=#{converter.encode(sec2)}"

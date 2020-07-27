@@ -27,10 +27,10 @@ module FaaAuth
 
     def initialize(options = {})
       @options = default_options.merge(options)
-      @driver = options.fetch(:driver, :selenium)
+      @driver = options.fetch(:driver, :cuprite)
       # Check credentials
       raise('FAA_USERNAME_CODE is required.') unless (options[:login] || ENV['FAA_USERNAME_CODE']).present?
-      raise('FAA_PASSWORD_CODE is required.') unless (options[:password] || ENV['FAA_PASSWORD_CODE']).present?
+      raise('FAA_ACCESS_PIN is required.') unless (options[:password] || ENV['FAA_ACCESS_PIN']).present?
       Converter.salt if options[:login].blank? || options[:password].blank?
 
       Capybara.save_path = options.fetch(:save_path, 'tmp') if Capybara.save_path.nil?
@@ -56,6 +56,7 @@ module FaaAuth
     def current_path
       session.current_path
     end
+
 
   end
 end
