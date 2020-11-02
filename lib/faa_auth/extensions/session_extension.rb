@@ -42,20 +42,50 @@ module FaaAuth
       %Q(img[alt="MyFAA"])
     end
 
+    def access_sign_in_page?
+      session.has_selector?('#accessid')
+    end
+
+    def goto_access_sign_in
+      return true if access_sign_in_page?
+      click_sign_in_selector
+      access_sign_in_page?
+    end
+
     def sign_in(url = nil)
       url ||= initial_url
       session.visit url
-      debug "Visiting #{url}\n"
-      #restore_cookies if keep_cookie?
-      link = find_sign_in_link
-      if link
-        debug "found sign in link: [#{link}]\n"
-        session.click_link link
+      at_access_page = goto_access_sign_in
+      if at_access_page
+        return sign_in_to_access
+      else
+        raise 'Need to override sign_in_selector to goto access sign in page'
       end
+    end
+
+    def sign_in_selector=(text)
+      @sign_in_selector = text
+    end
+
+    def sign_in_selector
+      @sign_in_selector
+    end
+      
+
+    def click_sign_in_selector
+      session.find(sign_in_selector).click
+    rescue
+      raise 'you must set sign in selector in initialization :sign_in_selector or #sign_in_selector='
+    end
+
+    def sign_in_selector
+      session.find_link(sign_in_selector)
+    end
+
+    def sign_in_to_access
       success = submit_use_email_address
-      # success = submit_signin_form
       if success
-        success =submit_access_form
+        success = submit_access_form
       end
       return success
     end
@@ -130,7 +160,7 @@ module FaaAuth
        # break if login_button_enabled?
       #end
       session.click_on('Sign In')
-      fill_in_access_form if session.has_selector?('#PIN_INPUT')
+      fillin_access_form if session.has_selector?('#PIN_INPUT')
       log "Clicked Sign In"
       debug "End fillin_access_form/n"
       true

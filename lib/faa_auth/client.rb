@@ -26,6 +26,7 @@ module FaaAuth
 
 
     def initialize(options = {})
+      @sign_in_selector = options.fetch(:sign_in_selector){ 'Sign In'}
       @options = default_options.merge(options)
       @driver = options.fetch(:driver, :cuprite)
       # Check credentials
@@ -46,6 +47,10 @@ module FaaAuth
 
     def session
       @session ||= Capybara::Session.new(@driver)
+    end
+
+    def get(url)
+      session.visit(url)
     end
 
     # Hide instance variables of credentials on console

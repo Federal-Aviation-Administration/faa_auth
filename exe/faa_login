@@ -1,9 +1,6 @@
 $LOAD_PATH.unshift File.join(__dir__ , 'lib')
 require 'faa_auth'
-require 'pry'
-
 client = FaaAuth::Client.new()
-# //client = FaaAuth::Client.new(driver: :firefox)
+#client = FaaAuth::Client.new(driver: :firefox)
 client.sign_in
-binding.pry
 puts 'Hello'
