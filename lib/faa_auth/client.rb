@@ -1,5 +1,4 @@
 class Object
-
   def blank?
     respond_to?(:empty?) ? !!empty? : !self
   end
@@ -8,16 +7,13 @@ class Object
     !blank?
   end
 
-
   def presence
     self if present?
   end
 end
 
 module FaaAuth
-
   class Client
-
     include FaaAuth::CommonExtension
     include FaaAuth::SessionExtension
 
@@ -26,15 +22,15 @@ module FaaAuth
 
 
     def initialize(options = {})
-      @sign_in_selector = options.fetch(:sign_in_selector){ 'Sign In'}
+      @sign_in_selector = options.fetch(:sign_in_selector) { "Sign In" }
       @options = default_options.merge(options)
       @driver = options.fetch(:driver, :cuprite)
       # Check credentials
-      raise('FAA_USERNAME_CODE is required.') unless (options[:login] || ENV['FAA_USERNAME_CODE']).present?
-      raise('FAA_ACCESS_PIN is required.') unless (options[:password] || ENV['FAA_ACCESS_PIN']).present?
+      raise("FAA_USERNAME_CODE is required.") unless (options[:login] || ENV["FAA_USERNAME_CODE"]).present?
+      raise("FAA_ACCESS_PIN is required.") unless (options[:password] || ENV["FAA_ACCESS_PIN"]).present?
       Converter.salt if options[:login].blank? || options[:password].blank?
 
-      Capybara.save_path = options.fetch(:save_path, 'tmp') if Capybara.save_path.nil?
+      Capybara.save_path = options.fetch(:save_path, "tmp") if Capybara.save_path.nil?
       Capybara.app_host = initial_url if Capybara.app_host.nil?
     rescue => e
       puts "Please setup credentials of faa_auth gem by following its instruction."
@@ -61,7 +57,5 @@ module FaaAuth
     def current_path
       session.current_path
     end
-
-
   end
 end

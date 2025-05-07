@@ -1,16 +1,16 @@
-require 'dotenv'
+require "dotenv"
 Dotenv.load
-require 'capybara'
-require 'capybara/sessionkeeper'
-require 'highline/import'
+require "capybara"
+require "capybara/sessionkeeper"
+require "highline/import"
 begin
-  require 'byebug'
+  require "byebug"
 rescue LoadError
 end
 
 def which(cmd)
-  exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
-  ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+  exts = ENV["PATHEXT"] ? ENV["PATHEXT"].split(";") : [""]
+  ENV["PATH"].split(File::PATH_SEPARATOR).each do |path|
     exts.each do |ext|
       exe = File.join(path, "#{cmd}#{ext}")
       return exe if File.executable?(exe) && !File.directory?(exe)
@@ -19,8 +19,9 @@ def which(cmd)
   nil
 end
 
-require 'webdrivers'
-chrome = ENV['CHROME_PATH'] || which('chrome')
+require "webdrivers"
+chrome = ENV["CHROME_PATH"] || which("chrome")
+ENV["BROWSER_PATH"] = chrome
 puts "Using chrome: #{chrome}"
 Selenium::WebDriver::Chrome.path = chrome
 
@@ -37,5 +38,4 @@ require_relative "faa_auth/client"
 
 
 module FaaAuth
-
 end

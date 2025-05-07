@@ -1,5 +1,6 @@
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+# frozen_string_literal: true
 
-Dir[File.join(File.dirname(__FILE__), "..","test", "support","**/*.rb")].each{|f| require f}
-
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "faa_auth"
+
+require "minitest/autorun"

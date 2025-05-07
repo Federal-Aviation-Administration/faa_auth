@@ -1,21 +1,25 @@
 #!/usr/bin/env ruby
 
 require_relative "../lib/faa_auth"
-require 'highline/import'
+require "highline/import"
 
-result = []
-
-domain = ask("Enter your faa domain: ") { |q| q.echo = true ; q.default = FaaInfo.domain }
+domain = ask("Enter your faa domain: ") { |q|
+  q.echo = true
+  q.default = FaaInfo.domain
+}
 login = ask("Enter your #{domain} username: ") { |q| q.echo = true }
 passwd = ask("Enter your FAA Access pin : ") { |q| q.echo = "*" }
-sec1 = ask("Enter security question1: "){ |q| q.echo = true ;}
-ans1 = ask("Enter security answer1: "){ |q| q.echo = true ;}
-sec2 = ask("Enter security question2: "){ |q| q.echo = true ;}
-ans2 = ask("Enter security answer2: "){ |q| q.echo = true ;}
-sec3 = ask("Enter security question3: "){ |q| q.echo = true ;}
-ans3 = ask("Enter security answer3: "){ |q| q.echo = true ;}
+sec1 = ask("Enter security question1: ") { |q| q.echo = true }
+ans1 = ask("Enter security answer1: ") { |q| q.echo = true }
+sec2 = ask("Enter security question2: ") { |q| q.echo = true }
+ans2 = ask("Enter security answer2: ") { |q| q.echo = true }
+sec3 = ask("Enter security question3: ") { |q| q.echo = true }
+ans3 = ask("Enter security answer3: ") { |q| q.echo = true }
 
-salt = ask("Enter your salt: ") { |q| q.default = FaaAuth::Converter.default_salt ; q.echo = true }
+salt = ask("Enter your salt: ") { |q|
+  q.default = FaaAuth::Converter.default_salt
+  q.echo = true
+}
 
 
 raise "Empty login or password" if login.to_s.size == 0 || passwd.to_s.size == 0
@@ -36,6 +40,6 @@ puts "FAA_SECURITY_ANSWER3=#{converter.encode(ans3)}"
 
 puts "FAA_CODE_SALT=#{salt}"
 
-#Which city were you born in?
-#Where did you first meet your spouse?
-#What is your pet's name?
+# Which city were you born in?
+# Where did you first meet your spouse?
+# What is your pet's name?

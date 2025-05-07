@@ -5,11 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Current File",
+      "type": "Ruby",
+      "request": "launch",
+      "program": "${file}",
+      "cwd": "${workspaceRoot}",
+      "args": [
+        "-I",
+        "lib"
+      ]
+    },
+    {
       "name": "Listen for rdebug-ide",
       "type": "Ruby",
       "request": "attach",
       "remoteHost": "127.0.0.1",
-      "remotePort": "1234",
+      "remotePort": "8808",
       "remoteWorkspaceRoot": "${workspaceRoot}"
     },
     {
@@ -17,7 +28,11 @@
       "type": "Ruby",
       "request": "launch",
       "program": "${workspaceRoot}/exe/faa_login",
-      "args": ["-I", "lib"]
+      "cwd": "${workspaceRoot}",
+      "args": [
+        "-I",
+        "lib"
+      ]
     }
   ]
 }
